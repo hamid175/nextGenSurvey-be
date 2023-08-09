@@ -1,8 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import Team, { ITeam } from '../models/Team'; 
+import jwt from 'jsonwebtoken';
+import Team from '../models/Team'; 
 import User from '../models/User';
-import Survey from '../models/Survey';
+import Survey ,{ISurvey} from '../models/Survey';
+import { authMiddleware } from '../middleware/authMiddleware';
+import { submitSurveyResponse } from './surveysController';
+import CustomRequest from '../customRequest';
 
+const adminId = 'your-admin-id';
 // Controller function for creating a new team
 export const createTeam = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -28,6 +33,24 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+export const getTotalNumberOfTeams = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const totalTeams = await Team.countDocuments();
+    return res.status(200).json({ totalTeams });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getTotalNumberOfUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    return res.status(200).json({ totalUsers });
+  } catch (error) {
+    next(error);
+  }
+};
 // Controller function for adding a user to a team
 export const addMemberToTeam = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -120,3 +143,107 @@ export const getSurveyData = async (req: Request, res: Response, next: NextFunct
     next(error);
   }
 };
+
+
+export const adminLogin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body;
+
+    // Perform admin authentication logic (e.g., check credentials)
+    // Replace this with your actual authentication logic
+    if (email === 'hrk3341@gmail.com' && password === '123456789') {
+      // Authentication successful
+
+      // Generate a JWT token
+      const token = jwt.sign({ userId: adminId, isAdmin: true }, process.env.JWT_SECRET!, { expiresIn: '1h' });
+
+      return res.status(200).json({ message: 'Admin login successful', token });
+    } else {
+      // Authentication failed
+      return res.status(401).json({ message: 'Admin login failed' });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getTotalSurveyResponses = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Count the total number of survey responses in the Survey model
+    const totalResponses = await Survey.aggregate([
+      { $project: { numResponses: { $size: "$responses" } } },
+      { $group: { _id: null, totalResponses: { $sum: "$numResponses" } } }
+    ]);
+
+    return res.status(200).json({ totalResponses: totalResponses.length > 0 ? totalResponses[0].totalResponses : 0 });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const getTeamInfo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Find all teams
+    const teams = await Team.find({});
+
+    // Create an array to hold team info
+    const teamInfo = [];
+
+    // Iterate through each team
+    for (const team of teams) {
+      // Populate the surveys for the team
+      const populatedTeam = await Team.findOne({ _id: team._id }).populate({
+        path: 'surveys',
+        populate: {
+          path: 'responses.userId',
+          model: 'User',
+        },
+      });
+
+      if (!populatedTeam) {
+        return res.status(404).json({ message: 'Team not found' });
+      }
+
+      const teamSurveys: ISurvey[] = populatedTeam.surveys as ISurvey[];
+
+      // Calculate the number of members
+      const numMembers = team.members.length;
+
+      // Calculate the total number of survey submissions
+      const totalSurveySubmissions = teamSurveys.reduce(
+        (total: number, survey: ISurvey) => total + survey.responses.length,
+        0
+      );
+
+      // Calculate the number of pending responses (responses with fewer answers than questions)
+      const numPendingResponses = teamSurveys
+        .map((survey: ISurvey) =>
+          survey.responses.some(
+            (response) => response.answers.length < survey.questions.length
+          )
+        )
+        .filter((hasPendingResponse: boolean) => hasPendingResponse).length;
+
+      // Create an object with team info
+      const teamInfoItem = {
+        teamCode: team.teamCode,
+        numMembers,
+        totalSurveySubmissions,
+        numPendingResponses,
+      };
+
+      // Push the team info to the array
+      teamInfo.push(teamInfoItem);
+    }
+
+    // Return the team info array
+    return res.status(200).json({ teamInfo });
+  } catch (error) {
+    next(error);
+  }
+};
+
+

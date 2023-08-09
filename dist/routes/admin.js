@@ -28,7 +28,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const adminController = __importStar(require("../controller/adminController"));
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const authMiddleware_2 = require("../middleware/authMiddleware");
 const router = express_1.default.Router();
+router.post('/login', adminController.adminLogin);
+router.use(authMiddleware_1.authMiddleware);
+router.use(authMiddleware_2.adminAuthMiddleware);
 // API endpoint for creating a new team
 router.post('/teams', adminController.createTeam);
 // API endpoint for adding a user to a team
@@ -39,5 +44,9 @@ router.delete('/teams/:teamCode/members/:userId', adminController.removeMemberFr
 router.put('/teams/:teamCode/survey-time-frame', adminController.setSurveyTimeFrame);
 // API endpoint for getting survey data for a team
 router.get('/teams/:teamCode/survey-data', adminController.getSurveyData);
+router.get('/teams/count', adminController.getTotalNumberOfTeams);
+router.get('/users/count', adminController.getTotalNumberOfUsers);
+router.get('/responses/count', adminController.getTotalSurveyResponses);
+router.get('/teams/info', adminController.getTeamInfo);
 exports.default = router;
 //# sourceMappingURL=admin.js.map

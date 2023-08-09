@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Survey, { ISurvey } from '../models/Survey'; // Make sure to import your Survey model
+import Survey, { ISurvey } from '../models/Survey';
+ // Make sure to import your Survey model
 
 // Controller function for creating a new survey
 export const createSurvey = async (req: Request, res: Response, next: NextFunction) => {

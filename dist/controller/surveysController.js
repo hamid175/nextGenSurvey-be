@@ -13,7 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.submitSurveyResponse = exports.getSurveyById = exports.getAllSurveyData = exports.getAllSurveys = exports.createSurvey = void 0;
-const Survey_1 = __importDefault(require("../models/Survey")); // Make sure to import your Survey model
+const Survey_1 = __importDefault(require("../models/Survey"));
+// Make sure to import your Survey model
 // Controller function for creating a new survey
 const createSurvey = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {

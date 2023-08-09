@@ -17,6 +17,12 @@ const teamSchema = new mongoose_1.default.Schema({
             ref: 'User',
         },
     ],
+    surveys: [
+        {
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'Survey', // Make sure this references the correct model name 'Survey'
+        },
+    ],
 });
 const Team = mongoose_1.default.model('Team', teamSchema);
 exports.default = Team;
