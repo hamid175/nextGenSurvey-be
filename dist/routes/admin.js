@@ -35,20 +35,18 @@ const router = express_1.default.Router();
 router.post('/login', adminController.adminLogin);
 router.use(authMiddleware_1.authMiddleware);
 router.use(authMiddleware_2.adminAuthMiddleware);
-// API endpoint for creating a new team
+router.post('/', surveysController_1.default.createSurvey);
 router.post('/teams', adminController.createTeam);
-// API endpoint for adding a user to a team
 router.post('/teams/:teamCode/members', adminController.addMemberToTeam);
-// API endpoint for removing a user from a team
-router.delete('/teams/:teamCode/members/:userId', adminController.removeMemberFromTeam);
-// API endpoint for setting the survey time frame for a team
 router.put('/teams/:teamCode/survey-time-frame', adminController.setSurveyTimeFrame);
-// API endpoint for getting survey data for a team
 router.get('/teams/:teamCode/survey-data', adminController.getSurveyData);
 router.get('/admin/all', surveysController_1.default.getAllSurveyData);
+router.get('/:surveyId', surveysController_1.default.getSurveyById);
 router.get('/teams/count', adminController.getTotalNumberOfTeams);
 router.get('/users/count', adminController.getTotalNumberOfUsers);
 router.get('/responses/count', adminController.getTotalSurveyResponses);
 router.get('/teams/info', adminController.getTeamInfo);
+router.get('/admin/getallsurveys', surveysController_1.default.getAllSurveys);
+router.delete('/teams/:teamCode/members/:userId', adminController.removeMemberFromTeam);
 exports.default = router;
 //# sourceMappingURL=admin.js.map

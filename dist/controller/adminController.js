@@ -18,6 +18,35 @@ const Team_1 = __importDefault(require("../models/Team"));
 const User_1 = __importDefault(require("../models/User"));
 const Survey_1 = __importDefault(require("../models/Survey"));
 const adminId = 'your-admin-id';
+/**
+ * @swagger
+ * tags:
+ *   name: Teams
+ *   description: APIs related to managing teams
+ */
+/**
+ * @swagger
+ * /create-team:
+ *   post:
+ *     summary: Create a new team
+ *     tags: [Teams]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamCode:
+ *                 type: string
+ *             example:
+ *               teamCode: "team-123"
+ *     responses:
+ *       201:
+ *         description: Team created successfully
+ *       400:
+ *         description: Team code already exists
+ */
 // Controller function for creating a new team
 const createTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -40,6 +69,25 @@ const createTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createTeam = createTeam;
+/**
+ * @swagger
+ * /total-teams:
+ *   get:
+ *     summary: Get the total number of teams
+ *     tags: [Teams]
+ *     responses:
+ *       200:
+ *         description: Total number of teams
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalTeams:
+ *                   type: number
+ *             example:
+ *               totalTeams: 5
+ */
 const getTotalNumberOfTeams = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const totalTeams = yield Team_1.default.countDocuments();
@@ -50,6 +98,25 @@ const getTotalNumberOfTeams = (req, res, next) => __awaiter(void 0, void 0, void
     }
 });
 exports.getTotalNumberOfTeams = getTotalNumberOfTeams;
+/**
+ * @swagger
+ * /total-users:
+ *   get:
+ *     summary: Get the total number of users
+ *     tags: [Teams]
+ *     responses:
+ *       200:
+ *         description: Total number of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalUsers:
+ *                   type: number
+ *             example:
+ *               totalUsers: 10
+ */
 const getTotalNumberOfUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const totalUsers = yield User_1.default.countDocuments();
@@ -60,6 +127,38 @@ const getTotalNumberOfUsers = (req, res, next) => __awaiter(void 0, void 0, void
     }
 });
 exports.getTotalNumberOfUsers = getTotalNumberOfUsers;
+/**
+ * @swagger
+ * /add-member-to-team/{teamCode}:
+ *   post:
+ *     summary: Add a user to a team
+ *     tags: [Teams]
+ *     parameters:
+ *       - in: path
+ *         name: teamCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The team code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *             example:
+ *               userId: "user-123"
+ *     responses:
+ *       200:
+ *         description: User added to the team successfully
+ *       400:
+ *         description: User is already a member of the team or user not found
+ *       404:
+ *         description: Team not found
+ */
 // Controller function for adding a user to a team
 const addMemberToTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -89,7 +188,31 @@ const addMemberToTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.addMemberToTeam = addMemberToTeam;
-// Controller function for removing a user from a team
+/**
+ * @swagger
+ * /remove-member-from-team/{teamCode}/{userId}:
+ *   delete:
+ *     summary: Remove a user from a team
+ *     tags: [Teams]
+ *     parameters:
+ *       - in: path
+ *         name: teamCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The team code
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User removed from the team successfully
+ *       404:
+ *         description: Team not found or user not found
+ */
 const removeMemberFromTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { teamCode, userId } = req.params;
@@ -108,6 +231,41 @@ const removeMemberFromTeam = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.removeMemberFromTeam = removeMemberFromTeam;
+/**
+ * @swagger
+ * /set-survey-time-frame/{teamCode}:
+ *   put:
+ *     summary: Set the survey time frame for a team
+ *     tags: [Teams]
+ *     parameters:
+ *       - in: path
+ *         name: teamCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The team code
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               startTime:
+ *                 type: string
+ *                 format: date-time
+ *               endTime:
+ *                 type: string
+ *                 format: date-time
+ *             example:
+ *               startTime: "2023-08-10T08:00:00Z"
+ *               endTime: "2023-08-15T18:00:00Z"
+ *     responses:
+ *       200:
+ *         description: Survey time frame set successfully
+ *       404:
+ *         description: Team not found
+ */
 // Controller function for setting the survey time frame for a team
 const setSurveyTimeFrame = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -129,6 +287,63 @@ const setSurveyTimeFrame = (req, res, next) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.setSurveyTimeFrame = setSurveyTimeFrame;
+/**
+ * @swagger
+ * /get-survey-data/{teamCode}:
+ *   get:
+ *     summary: Get survey data for a team
+ *     tags: [Teams]
+ *     parameters:
+ *       - in: path
+ *         name: teamCode
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The team code
+ *     responses:
+ *       200:
+ *         description: Survey data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 team:
+ *                   type: object
+ *                   properties:
+ *                     teamCode:
+ *                       type: string
+ *                     members:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           email:
+ *                             type: string
+ *                 surveys:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       title:
+ *                         type: string
+ *                       responses:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             userId:
+ *                               type: string
+ *                             answers:
+ *                               type: array
+ *                               items:
+ *                                 type: object
+ *                                 properties:
+ *                                   questionIndex:
+ *                                     type: number
+ *                                   response:
+ *                                     type: number
+ */
 // Controller function for getting survey data for a team
 const getSurveyData = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -148,6 +363,44 @@ const getSurveyData = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getSurveyData = getSurveyData;
+/**
+ * @swagger
+ * /admin-login:
+ *   post:
+ *     summary: Admin login
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             example:
+ *               email: "admin@example.com"
+ *               password: "admin123"
+ *     responses:
+ *       200:
+ *         description: Admin login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *             example:
+ *               message: "Admin login successful"
+ *               token: "your-jwt-token"
+ *       401:
+ *         description: Admin login failed
+ */
 const adminLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -169,6 +422,25 @@ const adminLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.adminLogin = adminLogin;
+/**
+ * @swagger
+ * /total-survey-responses:
+ *   get:
+ *     summary: Get the total number of survey responses
+ *     tags: [Surveys]
+ *     responses:
+ *       200:
+ *         description: Total number of survey responses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalResponses:
+ *                   type: number
+ *             example:
+ *               totalResponses: 50
+ */
 const getTotalSurveyResponses = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Count the total number of survey responses in the Survey model
@@ -183,6 +455,44 @@ const getTotalSurveyResponses = (req, res, next) => __awaiter(void 0, void 0, vo
     }
 });
 exports.getTotalSurveyResponses = getTotalSurveyResponses;
+/**
+ * @swagger
+ * /team-info:
+ *   get:
+ *     summary: Get information about all teams
+ *     tags: [Teams]
+ *     responses:
+ *       200:
+ *         description: Team information retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 teamInfo:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       teamCode:
+ *                         type: string
+ *                       numMembers:
+ *                         type: number
+ *                       totalSurveySubmissions:
+ *                         type: number
+ *                       numPendingResponses:
+ *                         type: number
+ *             example:
+ *               teamInfo:
+ *                 - teamCode: "team-1"
+ *                   numMembers: 10
+ *                   totalSurveySubmissions: 30
+ *                   numPendingResponses: 5
+ *                 - teamCode: "team-2"
+ *                   numMembers: 8
+ *                   totalSurveySubmissions: 20
+ *                   numPendingResponses: 2
+ */
 const getTeamInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Find all teams
