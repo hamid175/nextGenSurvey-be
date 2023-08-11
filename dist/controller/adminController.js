@@ -75,6 +75,10 @@ const addMemberToTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
+        //check if member is already in the team
+        if (team.members.includes(user._id)) {
+            return res.status(400).json({ message: 'User is already a member of the team' });
+        }
         // Add the user to the team
         team.members.push(user._id);
         yield team.save();

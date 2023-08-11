@@ -27,6 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const surveysController_1 = __importDefault(require("../controller/surveysController"));
 const adminController = __importStar(require("../controller/adminController"));
 const authMiddleware_1 = require("../middleware/authMiddleware");
 const authMiddleware_2 = require("../middleware/authMiddleware");
@@ -44,6 +45,7 @@ router.delete('/teams/:teamCode/members/:userId', adminController.removeMemberFr
 router.put('/teams/:teamCode/survey-time-frame', adminController.setSurveyTimeFrame);
 // API endpoint for getting survey data for a team
 router.get('/teams/:teamCode/survey-data', adminController.getSurveyData);
+router.get('/admin/all', surveysController_1.default.getAllSurveyData);
 router.get('/teams/count', adminController.getTotalNumberOfTeams);
 router.get('/users/count', adminController.getTotalNumberOfUsers);
 router.get('/responses/count', adminController.getTotalSurveyResponses);

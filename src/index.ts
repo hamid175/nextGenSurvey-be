@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 
 import cors from 'cors';
 import mongoose from 'mongoose';
+import swaggerUi from 'swagger-ui-express';
 
 import dotenv from 'dotenv';
 import path from 'path';
@@ -15,6 +16,7 @@ import adminRoutes from './routes/admin';
 dotenv.config();
 
 const app = express();
+
 
 // Middleware
 app.use(bodyParser.json());

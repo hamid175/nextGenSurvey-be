@@ -1,4 +1,5 @@
 import express from 'express';
+import surveysController from '../controller/surveysController';
 import * as adminController from '../controller/adminController';
 import { authMiddleware } from '../middleware/authMiddleware';
 import { adminAuthMiddleware } from '../middleware/authMiddleware';
@@ -26,6 +27,8 @@ router.put('/teams/:teamCode/survey-time-frame', adminController.setSurveyTimeFr
 
 // API endpoint for getting survey data for a team
 router.get('/teams/:teamCode/survey-data', adminController.getSurveyData);
+
+router.get('/admin/all', surveysController.getAllSurveyData);
 
 
 
