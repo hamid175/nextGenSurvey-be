@@ -12,10 +12,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllTeams = exports.removeMemberFromTeam = exports.addMemberToTeam = exports.createTeam = void 0;
+exports.removeMemberFromTeam = exports.addMemberToTeam = exports.createTeam = exports.getAllTeams = void 0;
 const Team_1 = __importDefault(require("../models/Team")); // Make sure to import your Team model
 const User_1 = __importDefault(require("../models/User")); // Make sure to import your User model
 // Controller function for creating a new team
+const getAllTeams = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Find all teams in the database
+        const teams = yield Team_1.default.find({});
+        // If no teams are found, return a 404 status with an error message
+        if (teams.length === 0) {
+            return res.status(404).json({ message: 'No teams found' });
+        }
+        // Return the list of teams as a JSON response
+        return res.status(200).json(teams);
+    }
+    catch (error) {
+        // If there is an error, pass it to the error handling middleware
+        next(error);
+    }
+});
+exports.getAllTeams = getAllTeams;
 const createTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { teamCode } = req.body;
@@ -91,24 +108,6 @@ const removeMemberFromTeam = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.removeMemberFromTeam = removeMemberFromTeam;
-// Controller function to get all teams
-const getAllTeams = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        // Find all teams in the database
-        const teams = yield Team_1.default.find({});
-        // If no teams are found, return a 404 status with an error message
-        if (teams.length === 0) {
-            return res.status(404).json({ message: 'No teams found' });
-        }
-        // Return the list of teams as a JSON response
-        return res.status(200).json(teams);
-    }
-    catch (error) {
-        // If there is an error, pass it to the error handling middleware
-        next(error);
-    }
-});
-exports.getAllTeams = getAllTeams;
 // Export the controller functions
 exports.default = { createTeam: exports.createTeam, addMemberToTeam: exports.addMemberToTeam, removeMemberFromTeam: exports.removeMemberFromTeam, getAllTeams: exports.getAllTeams };
 //# sourceMappingURL=teamsController.js.map

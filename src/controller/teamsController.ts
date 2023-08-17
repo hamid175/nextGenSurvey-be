@@ -3,6 +3,27 @@ import Team, { ITeam } from '../models/Team'; // Make sure to import your Team m
 import User, { IUser } from '../models/User'; // Make sure to import your User model
 
 // Controller function for creating a new team
+
+
+export const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Find all teams in the database
+    const teams = await Team.find({});
+
+    // If no teams are found, return a 404 status with an error message
+    if (teams.length === 0) {
+      return res.status(404).json({ message: 'No teams found' });
+    }
+
+    // Return the list of teams as a JSON response
+    return res.status(200).json(teams);
+  } catch (error) {
+    // If there is an error, pass it to the error handling middleware
+    next(error);
+  }
+};
+
+
 export const createTeam = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { teamCode } = req.body;
@@ -89,24 +110,7 @@ export const removeMemberFromTeam = async (req: Request, res: Response, next: Ne
   }
 };
 
-// Controller function to get all teams
-export const getAllTeams = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    // Find all teams in the database
-    const teams = await Team.find({});
 
-    // If no teams are found, return a 404 status with an error message
-    if (teams.length === 0) {
-      return res.status(404).json({ message: 'No teams found' });
-    }
-
-    // Return the list of teams as a JSON response
-    return res.status(200).json(teams);
-  } catch (error) {
-    // If there is an error, pass it to the error handling middleware
-    next(error);
-  }
-};
 
 // Export the controller functions
 export default { createTeam, addMemberToTeam, removeMemberFromTeam, getAllTeams };

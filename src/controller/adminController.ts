@@ -18,7 +18,7 @@ const adminId = 'your-admin-id';
 
 /**
  * @swagger
- * /create-team:
+ * /api/admin/teams:
  *   post:
  *     summary: Create a new team
  *     tags: [Teams]
@@ -74,7 +74,7 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /total-teams:
+ * /api/admin/teams/count:
  *   get:
  *     summary: Get the total number of teams
  *     tags: [Teams]
@@ -103,7 +103,7 @@ export const getTotalNumberOfTeams = async (req: Request, res: Response, next: N
 
 /**
  * @swagger
- * /total-users:
+ * /api/admin/users/count:
  *   get:
  *     summary: Get the total number of users
  *     tags: [Teams]
@@ -135,7 +135,7 @@ export const getTotalNumberOfUsers = async (req: Request, res: Response, next: N
 
 /**
  * @swagger
- * /add-member-to-team/{teamCode}:
+ * /api/admin/teams/{teamCode}/members:
  *   post:
  *     summary: Add a user to a team
  *     tags: [Teams]
@@ -205,7 +205,7 @@ export const addMemberToTeam = async (req: Request, res: Response, next: NextFun
 
 /**
  * @swagger
- * /remove-member-from-team/{teamCode}/{userId}:
+ * /api/admin/teams/{teamCode}/members/{userId}:
  *   delete:
  *     summary: Remove a user from a team
  *     tags: [Teams]
@@ -254,7 +254,7 @@ export const removeMemberFromTeam = async (req: Request, res: Response, next: Ne
 
 /**
  * @swagger
- * /set-survey-time-frame/{teamCode}:
+ * /api/admin/teams/{teamCode}/survey-time-frame:
  *   put:
  *     summary: Set the survey time frame for a team
  *     tags: [Teams]
@@ -316,7 +316,7 @@ export const setSurveyTimeFrame = async (req: Request, res: Response, next: Next
 
 /**
  * @swagger
- * /get-survey-data/{teamCode}:
+ * /api/admin/teams/{teamCode}/survey-data:
  *   get:
  *     summary: Get survey data for a team
  *     tags: [Teams]
@@ -396,7 +396,7 @@ export const getSurveyData = async (req: Request, res: Response, next: NextFunct
 
 /**
  * @swagger
- * /admin-login:
+ * /api/admin/login:
  *   post:
  *     summary: Admin login
  *     tags: [Admin]
@@ -456,7 +456,7 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /total-survey-responses:
+ * /api/admin/responses/count:
  *   get:
  *     summary: Get the total number of survey responses
  *     tags: [Surveys]
@@ -493,7 +493,7 @@ export const getTotalSurveyResponses = async (req: Request, res: Response, next:
 
 /**
  * @swagger
- * /team-info:
+ * /api/admin/teams/info:
  *   get:
  *     summary: Get information about all teams
  *     tags: [Teams]

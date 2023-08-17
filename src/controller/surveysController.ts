@@ -1,8 +1,49 @@
 import { Request, Response, NextFunction } from 'express';
 import Survey, { ISurvey } from '../models/Survey';
- // Make sure to import your Survey model
 
-// Controller function for creating a new survey
+
+/**
+ * @swagger
+ * tags:
+ *   name: Surveys
+ *   description: APIs related to managing surveys
+ */
+
+/**
+ * @swagger
+ * /api/admin/createSurvey:
+ *   post:
+ *     summary: Create a new survey
+ *     tags: [Surveys]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               questions:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *             example:
+ *               title: "Survey Title"
+ *               questions: ["Question 1", "Question 2"]
+ *     responses:
+ *       201:
+ *         description: Survey created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 surveyId:
+ *                   type: string
+ */
 export const createSurvey = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title, questions } = req.body;
@@ -22,7 +63,25 @@ export const createSurvey = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-// Controller function for getting all surveys
+/**
+ * @swagger
+ * /api/admin/getallsurveys:
+ *   get:
+ *     summary: Get a list of all surveys
+ *     tags: [Surveys]
+ *     responses:
+ *       200:
+ *         description: List of surveys
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   title:
+ *                     type: string
+ */
 export const getAllSurveys = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const surveys = await Survey.find({}, 'title');
@@ -32,6 +91,26 @@ export const getAllSurveys = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+
+/**
+ * @swagger
+ * /api/admin/allSurveyData:
+ *   get:
+ *     summary: Get all survey data including responses
+ *     tags: [Surveys]
+ *     responses:
+ *       200:
+ *         description: List of surveys with responses
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 surveys:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Survey'
+ */
 export const getAllSurveyData = async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Fetch all surveys with their responses
@@ -44,7 +123,30 @@ export const getAllSurveyData = async (req: Request, res: Response, next: NextFu
 };
 
 
-// Controller function for getting a specific survey by ID
+
+/**
+ * @swagger
+ * /api/admin/surveyById/{surveyId}:
+ *   get:
+ *     summary: Get a specific survey by ID
+ *     tags: [Surveys]
+ *     parameters:
+ *       - in: path
+ *         name: surveyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the survey to retrieve
+ *     responses:
+ *       200:
+ *         description: Survey details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Survey'
+ *       404:
+ *         description: Survey not found
+ */
 export const getSurveyById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { surveyId } = req.params;
@@ -58,7 +160,47 @@ export const getSurveyById = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-// Controller function for submitting a survey response
+
+/**
+ * @swagger
+ * /api/user/{surveyId}/submit:
+ *   post:
+ *     summary: Submit a survey response
+ *     tags: [Surveys]
+ *     parameters:
+ *       - in: path
+ *         name: surveyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the survey for which the response is being submitted
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               answers:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     questionIndex:
+ *                       type: number
+ *                     response:
+ *                       type: number
+ *             example:
+ *               userId: "user-123"
+ *               answers: [{ questionIndex: 0, response: 2 }, { questionIndex: 1, response: 1 }]
+ *     responses:
+ *       200:
+ *         description: Survey response submitted successfully
+ *       400:
+ *         description: User has already submitted a response for this survey or survey not found
+ */
 export const submitSurveyResponse = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { surveyId } = req.params;

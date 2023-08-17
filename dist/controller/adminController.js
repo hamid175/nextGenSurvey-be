@@ -26,7 +26,7 @@ const adminId = 'your-admin-id';
  */
 /**
  * @swagger
- * /create-team:
+ * /api/admin/teams:
  *   post:
  *     summary: Create a new team
  *     tags: [Teams]
@@ -71,7 +71,7 @@ const createTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.createTeam = createTeam;
 /**
  * @swagger
- * /total-teams:
+ * /api/admin/teams/count:
  *   get:
  *     summary: Get the total number of teams
  *     tags: [Teams]
@@ -100,7 +100,7 @@ const getTotalNumberOfTeams = (req, res, next) => __awaiter(void 0, void 0, void
 exports.getTotalNumberOfTeams = getTotalNumberOfTeams;
 /**
  * @swagger
- * /total-users:
+ * /api/admin/users/count:
  *   get:
  *     summary: Get the total number of users
  *     tags: [Teams]
@@ -129,7 +129,7 @@ const getTotalNumberOfUsers = (req, res, next) => __awaiter(void 0, void 0, void
 exports.getTotalNumberOfUsers = getTotalNumberOfUsers;
 /**
  * @swagger
- * /add-member-to-team/{teamCode}:
+ * /api/admin/teams/{teamCode}/members:
  *   post:
  *     summary: Add a user to a team
  *     tags: [Teams]
@@ -190,7 +190,7 @@ const addMemberToTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.addMemberToTeam = addMemberToTeam;
 /**
  * @swagger
- * /remove-member-from-team/{teamCode}/{userId}:
+ * /api/admin/teams/{teamCode}/members/{userId}:
  *   delete:
  *     summary: Remove a user from a team
  *     tags: [Teams]
@@ -233,7 +233,7 @@ const removeMemberFromTeam = (req, res, next) => __awaiter(void 0, void 0, void 
 exports.removeMemberFromTeam = removeMemberFromTeam;
 /**
  * @swagger
- * /set-survey-time-frame/{teamCode}:
+ * /api/admin/teams/{teamCode}/survey-time-frame:
  *   put:
  *     summary: Set the survey time frame for a team
  *     tags: [Teams]
@@ -289,7 +289,7 @@ const setSurveyTimeFrame = (req, res, next) => __awaiter(void 0, void 0, void 0,
 exports.setSurveyTimeFrame = setSurveyTimeFrame;
 /**
  * @swagger
- * /get-survey-data/{teamCode}:
+ * /api/admin/teams/{teamCode}/survey-data:
  *   get:
  *     summary: Get survey data for a team
  *     tags: [Teams]
@@ -365,7 +365,7 @@ const getSurveyData = (req, res, next) => __awaiter(void 0, void 0, void 0, func
 exports.getSurveyData = getSurveyData;
 /**
  * @swagger
- * /admin-login:
+ * /api/admin/login:
  *   post:
  *     summary: Admin login
  *     tags: [Admin]
@@ -424,7 +424,7 @@ const adminLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 exports.adminLogin = adminLogin;
 /**
  * @swagger
- * /total-survey-responses:
+ * /api/admin/responses/count:
  *   get:
  *     summary: Get the total number of survey responses
  *     tags: [Surveys]
@@ -457,7 +457,7 @@ const getTotalSurveyResponses = (req, res, next) => __awaiter(void 0, void 0, vo
 exports.getTotalSurveyResponses = getTotalSurveyResponses;
 /**
  * @swagger
- * /team-info:
+ * /api/admin/teams/info:
  *   get:
  *     summary: Get information about all teams
  *     tags: [Teams]

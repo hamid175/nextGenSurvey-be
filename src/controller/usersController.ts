@@ -4,7 +4,52 @@ import bcrypt from 'bcrypt';
 import User, { IUser } from '../models/User';
 import Team, { ITeam } from '../models/Team';
 import CustomRequest from '../customRequest';
-// Controller function for user registration
+
+
+
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: APIs related to managing users
+ */
+
+/**
+ * @swagger
+ * /api/user/register:
+ *   post:
+ *     summary: Register a new user and add to a team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               teamCode:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               confirmPassword:
+ *                 type: string
+ *             example:
+ *               email: "user@example.com"
+ *               teamCode: "team-123"
+ *               password: "password123"
+ *               confirmPassword: "password123"
+ *     responses:
+ *       201:
+ *         description: User registered and added to the team successfully
+ *       400:
+ *         description: Email already registered or passwords do not match
+ *       404:
+ *         description: Team not found
+ */
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, teamCode, password, confirmPassword } = req.body;
@@ -47,7 +92,47 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
-// Controller function for user login
+
+
+
+/**
+ * @swagger
+ * /api/user/login:
+ *   post:
+ *     summary: User login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             example:
+ *               email: "user@example.com"
+ *               password: "password123"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *             example:
+ *               message: "Login successful"
+ *               token: "your-jwt-token"
+ *       401:
+ *         description: User not found or invalid password
+ */
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
@@ -74,7 +159,35 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
   }
 };
 
-// Controller function for adding a user to a team
+
+/**
+ * @swagger
+ * /api/user/join-team:
+ *   post:
+ *     summary: Join a team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamCode:
+ *                 type: string
+ *               userId:
+ *                 type: string
+ *             example:
+ *               teamCode: "team-123"
+ *               userId: "user-123"
+ *     responses:
+ *       200:
+ *         description: User added to the team successfully
+ *       400:
+ *         description: User is already a member of the team or user not found
+ *       404:
+ *         description: Team not found
+ */
 export const joinTeam = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { teamCode } = req.body;
@@ -111,7 +224,35 @@ export const joinTeam = async (req: Request, res: Response, next: NextFunction) 
 interface TokenPayload {
     userId: string;
   }
-// Controller function for user to switch teams
+
+
+
+
+/**
+ * @swagger
+ * /api/user/switch-team:
+ *   post:
+ *     summary: Switch to a different team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamCode:
+ *                 type: string
+ *             example:
+ *               teamCode: "team-456"
+ *     responses:
+ *       200:
+ *         description: User switched teams successfully
+ *       403:
+ *         description: User is not a member of the target team
+ *       404:
+ *         description: Team not found
+ */  
 export const switchTeam = async (req: CustomRequest, res: Response, next: NextFunction) => {
   try {
     const { teamCode } = req.body;

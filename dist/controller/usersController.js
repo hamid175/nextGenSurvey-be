@@ -17,7 +17,46 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const User_1 = __importDefault(require("../models/User"));
 const Team_1 = __importDefault(require("../models/Team"));
-// Controller function for user registration
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: APIs related to managing users
+ */
+/**
+ * @swagger
+ * /api/user/register:
+ *   post:
+ *     summary: Register a new user and add to a team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               teamCode:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               confirmPassword:
+ *                 type: string
+ *             example:
+ *               email: "user@example.com"
+ *               teamCode: "team-123"
+ *               password: "password123"
+ *               confirmPassword: "password123"
+ *     responses:
+ *       201:
+ *         description: User registered and added to the team successfully
+ *       400:
+ *         description: Email already registered or passwords do not match
+ *       404:
+ *         description: Team not found
+ */
 const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, teamCode, password, confirmPassword } = req.body;
@@ -53,7 +92,44 @@ const registerUser = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.registerUser = registerUser;
-// Controller function for user login
+/**
+ * @swagger
+ * /api/user/login:
+ *   post:
+ *     summary: User login
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             example:
+ *               email: "user@example.com"
+ *               password: "password123"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *             example:
+ *               message: "Login successful"
+ *               token: "your-jwt-token"
+ *       401:
+ *         description: User not found or invalid password
+ */
 const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { email, password } = req.body;
@@ -77,7 +153,34 @@ const loginUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.loginUser = loginUser;
-// Controller function for adding a user to a team
+/**
+ * @swagger
+ * /api/user/join-team:
+ *   post:
+ *     summary: Join a team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamCode:
+ *                 type: string
+ *               userId:
+ *                 type: string
+ *             example:
+ *               teamCode: "team-123"
+ *               userId: "user-123"
+ *     responses:
+ *       200:
+ *         description: User added to the team successfully
+ *       400:
+ *         description: User is already a member of the team or user not found
+ *       404:
+ *         description: Team not found
+ */
 const joinTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { teamCode } = req.body;
@@ -106,7 +209,31 @@ const joinTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.joinTeam = joinTeam;
-// Controller function for user to switch teams
+/**
+ * @swagger
+ * /api/user/switch-team:
+ *   post:
+ *     summary: Switch to a different team
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               teamCode:
+ *                 type: string
+ *             example:
+ *               teamCode: "team-456"
+ *     responses:
+ *       200:
+ *         description: User switched teams successfully
+ *       403:
+ *         description: User is not a member of the target team
+ *       404:
+ *         description: Team not found
+ */
 const switchTeam = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {

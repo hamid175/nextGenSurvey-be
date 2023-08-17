@@ -53,7 +53,7 @@ const options = {
       }
     ],
   },
-  apis : ['./controller/*.ts']
+  apis : ['./src/controller/*.ts']
 };
 const specs = swaggerJSDoc(options);
 app.use("/api-docs",swaggerUi.serve, swaggerUi.setup(specs) );

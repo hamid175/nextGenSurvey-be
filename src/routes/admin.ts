@@ -14,7 +14,7 @@ router.use(authMiddleware);
 
 router.use(adminAuthMiddleware);
 
-router.post('/', surveysController.createSurvey);
+router.post('/createSurvey', surveysController.createSurvey);
 
 router.post('/teams', adminController.createTeam);
 
@@ -24,9 +24,9 @@ router.put('/teams/:teamCode/survey-time-frame', adminController.setSurveyTimeFr
 
 router.get('/teams/:teamCode/survey-data', adminController.getSurveyData);
 
-router.get('/admin/all', surveysController.getAllSurveyData);
+router.get('/allSurveyData', surveysController.getAllSurveyData);
 
-router.get('/:surveyId', surveysController.getSurveyById);
+router.get('/surveyById/:surveyId', surveysController.getSurveyById);
 
 router.get('/teams/count', adminController.getTotalNumberOfTeams);
 
@@ -36,7 +36,7 @@ router.get('/responses/count', adminController.getTotalSurveyResponses);
 
 router.get('/teams/info', adminController.getTeamInfo);
 
-router.get('/admin/getallsurveys', surveysController.getAllSurveys);
+router.get('/getallsurveys', surveysController.getAllSurveys);
 
 router.delete('/teams/:teamCode/members/:userId', adminController.removeMemberFromTeam);
 
