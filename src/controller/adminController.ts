@@ -16,12 +16,22 @@ const adminId = 'your-admin-id';
  */
 
 
+
+
 /**
  * @swagger
  * /api/admin/teams:
  *   post:
  *     summary: Create a new team
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -32,18 +42,20 @@ const adminId = 'your-admin-id';
  *               teamCode:
  *                 type: string
  *             example:
- *               teamCode: "team-123"
+ *               teamCode: "team-456"
  *     responses:
  *       201:
  *         description: Team created successfully
+ *       403:
+ *         description: User is not a member of the target team
  *       400:
  *         description: Team code already exists
+ *     securityDefinitions:
+ *       bearerAuth:
+ *        type: apiKey
+ *        name: Authorization
+ *        in: header
  */
-
-
-
-
-
 
 // Controller function for creating a new team
 export const createTeam = async (req: Request, res: Response, next: NextFunction) => {
@@ -78,9 +90,17 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
  *   get:
  *     summary: Get the total number of teams
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
- *         description: Total number of teams
+ *         Total number of teams
  *         content:
  *           application/json:
  *             schema:
@@ -90,7 +110,13 @@ export const createTeam = async (req: Request, res: Response, next: NextFunction
  *                   type: number
  *             example:
  *               totalTeams: 5
+ *     securityDefinitions:
+ *       bearerAuth:
+ *        type: apiKey
+ *        name: Authorization
+ *        in: header
  */
+
 
 export const getTotalNumberOfTeams = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -107,6 +133,14 @@ export const getTotalNumberOfTeams = async (req: Request, res: Response, next: N
  *   get:
  *     summary: Get the total number of users
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Total number of users
@@ -119,9 +153,12 @@ export const getTotalNumberOfTeams = async (req: Request, res: Response, next: N
  *                   type: number
  *             example:
  *               totalUsers: 10
+ *     securityDefinitions:
+ *       bearerAuth:
+ *        type: apiKey
+ *        name: Authorization
+ *        in: header
  */
-
-
 export const getTotalNumberOfUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const totalUsers = await User.countDocuments();
@@ -139,6 +176,14 @@ export const getTotalNumberOfUsers = async (req: Request, res: Response, next: N
  *   post:
  *     summary: Add a user to a team
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     parameters:
  *       - in: path
  *         name: teamCode
@@ -164,6 +209,11 @@ export const getTotalNumberOfUsers = async (req: Request, res: Response, next: N
  *         description: User is already a member of the team or user not found
  *       404:
  *         description: Team not found
+ *     securityDefinitions:
+ *       bearerAuth:
+ *        type: apiKey
+ *        name: Authorization
+ *        in: header
  */
 
 
@@ -209,6 +259,14 @@ export const addMemberToTeam = async (req: Request, res: Response, next: NextFun
  *   delete:
  *     summary: Remove a user from a team
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     parameters:
  *       - in: path
  *         name: teamCode
@@ -258,6 +316,14 @@ export const removeMemberFromTeam = async (req: Request, res: Response, next: Ne
  *   put:
  *     summary: Set the survey time frame for a team
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     parameters:
  *       - in: path
  *         name: teamCode
@@ -320,6 +386,14 @@ export const setSurveyTimeFrame = async (req: Request, res: Response, next: Next
  *   get:
  *     summary: Get survey data for a team
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     parameters:
  *       - in: path
  *         name: teamCode
@@ -400,6 +474,14 @@ export const getSurveyData = async (req: Request, res: Response, next: NextFunct
  *   post:
  *     summary: Admin login
  *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -460,6 +542,14 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
  *   get:
  *     summary: Get the total number of survey responses
  *     tags: [Surveys]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Total number of survey responses
@@ -497,6 +587,14 @@ export const getTotalSurveyResponses = async (req: Request, res: Response, next:
  *   get:
  *     summary: Get information about all teams
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: [] 
+ *     parameters: 
+ *       - name: Authorization
+ *         in: header
+ *         description: Bearer Token
+ *         required: true
+ *         type: string
  *     responses:
  *       200:
  *         description: Team information retrieved successfully

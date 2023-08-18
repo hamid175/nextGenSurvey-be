@@ -37,16 +37,23 @@ const options = {
         openapi: "3.0.0",
         info: {
             title: "Survey App API Documentation",
-            version: '1.0.0',
-            description: "A survey app"
+            version: "1.0.0",
+            description: "A survey app",
         },
         servers: [
             {
                 url: "http://localhost:5000",
-            }
+            },
         ],
+        securityDefinitions: {
+            apiKeyAuth: {
+                type: "apiKey",
+                in: "header",
+                name: "Authorization", // The header name to expect the token
+            },
+        },
     },
-    apis: ['./src/controller/*.ts']
+    apis: ["./src/controller/*.ts"],
 };
 const specs = (0, swagger_jsdoc_1.default)(options);
 app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));

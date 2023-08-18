@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // MongoDB Connection
-const dbConnectionString = process.env.DB_CONNECTION_STRING!;
+const dbConnectionString:any = process.env.DB_CONNECTION_STRING;
 const dbOptions = {
   
   serverSelectionTimeoutMS: 10000, // Adjust the timeout as needed
@@ -37,23 +37,28 @@ mongoose
   .catch((error) => console.error('MongoDB connection error:', error));
 mongoose.set('debug', true);
 
-
 const options = {
-  definition : {
-    openapi : "3.0.0",
-    info:{
-      title:"Survey App API Documentation",
-      version:'1.0.0',
-      description: "A survey app"
-
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Survey App API Documentation",
+      version: "1.0.0",
+      description: "A survey app",
     },
-    servers : [
+    servers: [
       {
-        url :"http://localhost:5000",
-      }
+        url: "http://localhost:5000",
+      },
     ],
+    securityDefinitions: {
+      apiKeyAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "Authorization", // The header name to expect the token
+      },
+    },
   },
-  apis : ['./src/controller/*.ts']
+  apis: ["./src/controller/*.ts"],
 };
 const specs = swaggerJSDoc(options);
 app.use("/api-docs",swaggerUi.serve, swaggerUi.setup(specs) );
